@@ -1,0 +1,11 @@
+---
+version: '3.7'
+
+services:
+
+  hey:
+    build:
+      context: .
+      target: release
+    entrypoint: bash
+    image: ikerry/hey:${APP_TAG:-latest}
