@@ -2,7 +2,7 @@ ARG TERRAFORM_VERSION
 
 FROM alpine:3.14 as builder
 RUN apk --update add --no-cache libstdc++ libgcc curl upx \
-  && rm -rf /var/cache/apk/*
+  && rm -rf /var/cache/apk/* 
 
 ARG GOMPLATE_VERSION
 RUN curl -o /usr/local/bin/gomplate -sSL https://github.com/hairyhenderson/gomplate/releases/download/${GOMPLATE_VERSION}/gomplate_linux-amd64 \

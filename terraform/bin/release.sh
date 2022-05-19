@@ -9,8 +9,8 @@ if [ "$#" -lt 1 ]; then
   exit 255
 fi
 
-docker-compose build tf-toolkit
-docker-compose push tf-toolkit
+# docker-compose build tf-toolkit
+# docker-compose push tf-toolkit
 
 APP_TAG=${1}
 APP_TAG=${APP_TAG} docker-compose build tf-toolkit
