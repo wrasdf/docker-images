@@ -1,0 +1,13 @@
+---
+version: '3.7'
+
+services:
+
+  aws-iam-authenticator:
+    build:
+      context: .
+      args:
+        - AWSIAMAUTHENTICATOR=0.5.7
+    platform: linux/amd64
+    entrypoint: bash
+    image: ikerry/aws-iam-authenticator:${APP_TAG:-latest}
