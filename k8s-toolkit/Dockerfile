@@ -32,6 +32,12 @@ RUN echo  link: https://github.com/kubernetes-sigs/kustomize/releases/download/k
 RUN curl -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_${TARGETARCH}.tar.gz \
   |  tar -xz --no-same-owner -C /usr/local/bin/
 
+ARG HELM_VERSION
+RUN curl -L --silent https://get.helm.sh/helm-${HELM_VERSION}-linux-${TARGETARCH}.tar.gz \
+  | tar -C /tmp --no-same-owner -xvzf - linux-${TARGETARCH}/helm \
+  && mv /tmp/linux-${TARGETARCH}/helm /usr/local/bin \
+  && rmdir /tmp/linux-${TARGETARCH}
+
 FROM amazon/aws-cli:2.13.7 as release
 
 RUN yum -y install make jq openssh-clients unzip bash \
@@ -42,4 +48,6 @@ COPY --from=builder --chown=root:root \
   /usr/local/bin/gomplate \
   /usr/local/bin/istioctl \
   /usr/local/bin/yq \
+  /usr/local/bin/kustomize \
+  /usr/local/bin/helm \
   /usr/local/bin/
