@@ -1,6 +1,6 @@
-FROM alpine:3.14 as builder
+FROM alpine:3.17 as builder
 
-RUN apk --update add --no-cache libstdc++ libgcc curl upx \
+RUN apk --update add --no-cache libstdc++ libgcc curl upx bash \
   && rm -rf /var/cache/apk/*
 
 ARG TARGETARCH
@@ -26,12 +26,13 @@ RUN curl -L -o /tmp/istio.tgz \
   && mv -v /tmp/istio-${ISTIO_VERSION}/bin/istioctl /usr/local/bin/ \
   && rm -rf /tmp/istio-${ISTIO_VERSION}
 
-RUN upx \
-  /usr/local/bin/kubectl \
-  /usr/local/bin/gomplate \
-  /usr/local/bin/yq
+ARG KUSTOMIZE_VERSION
+RUN echo installing kustomize version ${KUSTOMIZE_VERSION}
+RUN echo  link: https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_${TARGETARCH}.tar.gz
+RUN curl -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_${TARGETARCH}.tar.gz \
+  |  tar -xz --no-same-owner -C /usr/local/bin/
 
-FROM amazon/aws-cli:2.11.24 as release
+FROM amazon/aws-cli:2.13.7 as release
 
 RUN yum -y install make jq openssh-clients unzip bash \
   && rm -rf /var/cache/yum/*

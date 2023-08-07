@@ -5,7 +5,7 @@ set -euo pipefail
 if [ "$#" -lt 1 ]; then
   echo
   echo "usage: release.sh <ImageTag>"
-  echo "  ie. release.sh v0.1.0"
+  echo "  ie. ./bin/release.sh v1.3.0"
   exit 255
 fi
 
