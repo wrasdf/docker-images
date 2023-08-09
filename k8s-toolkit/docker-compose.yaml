@@ -3,7 +3,25 @@ version: '3.9'
 
 services:
 
+  sh:
+    platform: linux/amd64
+    build:
+      context: .
+      target: builder
+      args:
+        - TARGETARCH=amd64
+        - KUBE_VERSION=1.27.3
+        - KUSTOMIZE_VERSION=5.1.0
+        - GOMPLATE_VERSION=v3.9.0
+        - YQ_VERSION=v4.9.8
+        - ISTIO_VERSION=1.18.2
+        - HELM_VERSION=v3.12.0
+        - CILIUM_CLI_VERSION=v0.15.5
+    entrypoint: bash
+
   k8s-toolkit:
+    platform: linux/amd64
+    image: ikerry/k8s-toolkit:${APP_TAG:-latest}
     build:
       context: .
       target: release
@@ -15,6 +33,6 @@ services:
         - YQ_VERSION=v4.9.8
         - ISTIO_VERSION=1.18.2
         - HELM_VERSION=v3.12.0
-    platform: linux/amd64
+        - CILIUM_CLI_VERSION=v0.15.5
     entrypoint: bash
-    image: ikerry/k8s-toolkit:${APP_TAG:-latest}
+    

@@ -1,6 +1,6 @@
 FROM alpine:3.17 as builder
 
-RUN apk --update add --no-cache libstdc++ libgcc curl upx bash \
+RUN apk --update add --no-cache libstdc++ libgcc curl upx bash tar \
   && rm -rf /var/cache/apk/*
 
 ARG TARGETARCH
@@ -38,9 +38,14 @@ RUN curl -L --silent https://get.helm.sh/helm-${HELM_VERSION}-linux-${TARGETARCH
   && mv /tmp/linux-${TARGETARCH}/helm /usr/local/bin \
   && rmdir /tmp/linux-${TARGETARCH}
 
+ARG CILIUM_CLI_VERSION
+ARG CLI_ARCH=amd64
+RUN curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz
+RUN tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
+
 FROM amazon/aws-cli:2.13.7 as release
 
-RUN yum -y install make jq openssh-clients unzip bash \
+RUN yum -y install make jq openssh-clients bash \
   && rm -rf /var/cache/yum/*
 
 COPY --from=builder --chown=root:root \
@@ -50,4 +55,5 @@ COPY --from=builder --chown=root:root \
   /usr/local/bin/yq \
   /usr/local/bin/kustomize \
   /usr/local/bin/helm \
+  /usr/local/bin/cilium \
   /usr/local/bin/
