@@ -48,7 +48,7 @@ FROM amazon/aws-cli:2.13.7 as release
 RUN yum -y install make jq openssh-clients bash \
   && rm -rf /var/cache/yum/*
 
-COPY --from=builder --chown=root:root \
+COPY --from=builder --chown=root:rocot \
   /usr/local/bin/kubectl \
   /usr/local/bin/gomplate \
   /usr/local/bin/istioctl \
@@ -57,3 +57,5 @@ COPY --from=builder --chown=root:root \
   /usr/local/bin/helm \
   /usr/local/bin/cilium \
   /usr/local/bin/
+
+CMD [ "bash" ]
