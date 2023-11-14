@@ -7,10 +7,6 @@ services:
     build:
       context: .
       target: release
-      args:
-        - TERRAFORM_VERSION=1.4.4
-        - GOMPLATE_VERSION=v3.11.4
-        - YQ_VERSION=v4.9.8
     platform: linux/amd64
     entrypoint: bash
     image: ikerry/tf-toolkit:${APP_TAG:-latest}

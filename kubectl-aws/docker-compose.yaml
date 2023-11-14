@@ -1,15 +1,19 @@
 ---
 version: '3.7'
 
+x-base: &base
+  platform: linux/amd64
+  build:
+    context: .
+    target: release
+
 services:
 
-  kubectl-awscli:
-    build:
-      context: .
-      target: builder
-      args:
-        - KUBE_VERSION=1.25.8
-        - AWSCLI_VERSION=v3.9.0
-    platform: linux/amd64
+  sh:
+    <<: *base
     entrypoint: bash
+
+  kubectl-awscli:
+    <<: *base
     image: ikerry/kubectl-awscli:${APP_TAG:-latest}
+    entrypoint: bash

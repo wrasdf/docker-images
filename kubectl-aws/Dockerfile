@@ -1,13 +1,9 @@
-FROM alpine:3.17 as builder
+FROM alpine:3.17 as release
 
-RUN apk --update add --no-cache libstdc++ libgcc curl upx bash \
+RUN apk --update add --no-cache libstdc++ libgcc curl bash aws-cli bind-tools \
   && rm -rf /var/cache/apk/*
 
-ARG KUBE_VERSION
+ENV KUBE_VERSION=1.28.2
 RUN curl -L -o /usr/local/bin/kubectl \
   https://storage.googleapis.com/kubernetes-release/release/v${KUBE_VERSION}/bin/linux/amd64/kubectl \
   && chmod +x /usr/local/bin/kubectl
-
-RUN curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
-  && unzip awscliv2.zip \
-  && aws/install 
