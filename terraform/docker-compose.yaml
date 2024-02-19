@@ -1,12 +1,12 @@
 ---
-version: '3.7'
+version: '3.9'
 
 services:
 
-  tf-toolkit:
+  tf:
     build:
       context: .
       target: release
     platform: linux/amd64
     entrypoint: bash
-    image: ikerry/tf-toolkit:${APP_TAG:-latest}
+    image: ikerry/tf:${APP_TAG:-latest}
